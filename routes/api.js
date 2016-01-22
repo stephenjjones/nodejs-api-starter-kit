@@ -3,8 +3,9 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const db = require('../db');
+const db = require('../models/bookshelf').knex;
 const secrets = require('../SECRETS');
+const Users = require('../models/user');
 
 
 router.post('/authenticate', function(req, res) {
@@ -76,16 +77,14 @@ router.use(function(req, res, next) {
 router.get('/users', function(req, res) {
   var results = [];
 
-  db('users').select('email')
-    .then(function(rows) {
-      rows.forEach(function(row) {
-        console.log(row);
-        results.push(row);
-      });
-    })
-    .then(function() {
-      res.json(results);
-    });
+  Users.forge()
+  .fetch()
+  .then(function (collection) {
+    res.json({error: false, data: collection.toJSON()});
+  })
+  .catch(function (err) {
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
 });
 
 router.get('/users/:email', function(req, res) {

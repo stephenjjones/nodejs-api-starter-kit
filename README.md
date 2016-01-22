@@ -1,6 +1,9 @@
-# !!!!! WORK IN PROGRESS
 
 # A Starter Kit for a Nodejs Web Server with a REST Api
+
+## Status
+
+WORK IN PROGRESS - DO NOT USE
 
 ## REPLACE THIS README WITH YOUR PROJECT SPECIFIC INFO
 
@@ -30,6 +33,8 @@ a REST Api and websockets.
 | [ESLint](http://eslint.org/) |  |
 | [pm2](http://pm2.keymetrics.io/) | Process manager |
 | [npm Scripts](https://docs.npmjs.com/misc/scripts) |  |
+| [knexjs](http://knexjs.org/) | query builder |
+| [bookshelfjs](http://bookshelfjs.org/) | ORM built on knexjs |
 
 
 ## Setup
@@ -50,9 +55,12 @@ $ npm install morgan --save           # Log requests to console
 $ npm install body-parser --save      # Extract params from POST requests
 $ npm install jsonwebtoken --save     # Create and verify JSON web tokens
 $ npm install pm2@latest -g
-$ npm install pg --save               # postgres client [pg github](https://github.com/brianc/node-postgres)
-$ npm install knex --save
 $ npm install bcryptjs --save
+$ npm install pg --save               # postgres client [pg github](https://github.com/brianc/node-postgres)
+$ npm install knex --save             # or -g to have $ knex 
+$ npm install bookshelf --save
+$ npm install lodash --save
+$ npm install bluebird --save
 ```
 
 #### Setup Postgres Database
@@ -82,6 +90,7 @@ $ psql                                  # logs into postgres shell
 | test       |                   |
 | clean      |                   |
 | startdb    | Start postgres for local development |
+| migrate    | creates database tables based on Schema.js |
 
 
 ### PM2 Process Manager
@@ -112,3 +121,12 @@ $ pm2 start app.js -i 0         # Will start maximum processes with LB depending
 $ pm2 list                      # Display all processes status
 $ pm2 start app.js --watch
 ```
+
+### Bookshelfjs
+
+Should only be initialized one in the application as it creates
+a connection pool.
+
+`$ knex migrate:make migration_name`
+`$ knex migrate:latest --env production`
+`$ knex seed:make seed_name`

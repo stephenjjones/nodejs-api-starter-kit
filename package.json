@@ -2,12 +2,17 @@
   "name": "nodejs-api-starter-kit",
   "version": "0.0.1",
   "description": "A starter project for building a nodejs server with a rest api",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:stephenjjones/nodejs-api-starter-kit.git"
+  },
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "startdb": "postgres -D /usr/local/var/postgres",
     "startdev": "pm2 start server.js --watch --no-daemon",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "migrate": "node models/migrate.js"
   },
   "keywords": [
     "nodejs",
@@ -20,9 +25,13 @@
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.3.0",
+    "bluebird": "^3.1.1",
     "body-parser": "^1.14.2",
+    "bookshelf": "^0.9.1",
     "express": "^4.13.3",
     "jsonwebtoken": "^5.5.4",
+    "knex": "^0.9.0",
+    "lodash": "^4.0.0",
     "morgan": "^1.6.1",
     "passport": "^0.3.2",
     "pm2": "^1.0.0"

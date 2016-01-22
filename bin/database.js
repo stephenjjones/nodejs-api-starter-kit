@@ -1,5 +1,5 @@
 // Script to create users table
-var db = require('../db.js');
+var db = require('../models/bookshelf.js').knex;
 
 var usersTable = function(table) {
   table.increments('id').primary();

@@ -1,4 +1,4 @@
-const db = require('knex')({
+const dbConfig = {
   client: 'pg',
   connection: {
     user: 'jones',
@@ -8,6 +8,8 @@ const db = require('knex')({
     charset  : 'utf8'
   },
   debug: true
-});
+};
 
-module.exports = db;
+const knex = require('knex')(dbConfig);
+
+module.exports = require('bookshelf')(knex);
