@@ -27,21 +27,6 @@ app.use('static', express.static(staticDir));
 
 app.use('/api/', apiRouter);
 
-app.get('/setup', function(req, res) {
-  // create a sample user
-  var db = bookshelf.knex
-  db('users')
-    .insert({email: 'stephen.jacob.jones@gmail.com', passwordHashed: 'password'}).returning('id')
-    .then(function(id) {
-      console.log('added sample user with id: ' + id);
-      res.json({ id: id[0] });
-    })
-    .catch(function(err) {
-      console.log(err);
-      res.send('No soup for you');
-    });
-});
-
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });

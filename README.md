@@ -127,6 +127,13 @@ $ pm2 start app.js --watch
 Should only be initialized one in the application as it creates
 a connection pool.
 
-`$ knex migrate:make migration_name`
-`$ knex migrate:latest --env production`
-`$ knex seed:make seed_name`
+```
+$ knex migrate:make migration_name
+$ knex migrate:latest --env production
+$ knex seed:make seed_name
+```
+
+### Auth / Auth
+
+[activity based authorization](http://derickbailey.com/2014/11/30/mustbe-authorization-plumbing-for-nodejs-express-apps/)
+[use jwt scopes](https://auth0.com/blog/2014/12/02/using-json-web-tokens-as-api-keys/)

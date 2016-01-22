@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const db = require('../models/bookshelf').knex;
 const secrets = require('../SECRETS');
 const Users = require('../models/user');
+var check_scopes = require('../middleware/checkscopes');
 
 
 router.post('/authenticate', function(req, res) {
@@ -18,10 +19,15 @@ router.post('/authenticate', function(req, res) {
       console.log('user found: ' + rows);
       // if user is found and password is right
       // create a token
+      const acls = [
+        'users:read',
+        'users:create'
+      ];
       const claims = {
         sub: rows[0].id,
         iss: 'http://mysitedomain.com',
-        permissions: 'add-recipes'
+        scopes: acls
+        
       };
       var token = jwt.sign(claims, secrets.secret, {
         expiresIn: 86400 // expires in 24 hours
@@ -74,7 +80,7 @@ router.use(function(req, res, next) {
   }
 });
 
-router.get('/users', function(req, res) {
+router.get('/users', check_scopes(['users:read']), function(req, res) {
   var results = [];
 
   Users.forge()
