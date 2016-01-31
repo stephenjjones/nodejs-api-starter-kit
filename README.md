@@ -91,6 +91,7 @@ $ psql                                  # logs into postgres shell
 | clean      |                   |
 | startdb    | Start postgres for local development |
 | migrate    | creates database tables based on Schema.js |
+| webpack    | webpack --progress --colors --watch
 
 
 ### PM2 Process Manager
@@ -139,3 +140,7 @@ $ npm seed:run
 
 * [activity based authorization](http://derickbailey.com/2014/11/30/mustbe-authorization-plumbing-for-nodejs-express-apps/)
 * [use jwt scopes](https://auth0.com/blog/2014/12/02/using-json-web-tokens-as-api-keys/)
+
+
+### Webpack
+* need to install webpack globally `npm install webpack -g`

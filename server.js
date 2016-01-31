@@ -23,7 +23,7 @@ app.use(morgan('dev'));
 
 const staticDir = './static';
 
-app.use('static', express.static(staticDir));
+app.use('/static', express.static(staticDir));
 
 app.use('/api/', apiRouter);
 
