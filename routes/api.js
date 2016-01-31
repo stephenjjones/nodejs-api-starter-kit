@@ -1,42 +1,53 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 const db = require('../models/bookshelf').knex;
 const secrets = require('../SECRETS');
 const Users = require('../models/user');
 var check_scopes = require('../middleware/checkscopes');
 
+const BCRYPT_WORK_FACTOR = 12;
 
 router.post('/authenticate', function(req, res) {
+
   // find the user
-  db('users').where({email: req.body.email, passwordHashed: req.body.password})
-  .select('id', 'email')
+  db('users').where({email: req.body.email})
+  .select('id', 'email', 'passwordHashed')
   .then(function(rows) {
-    // create jwt
+
     if (rows !== undefined) {
-      console.log('user found: ' + rows);
-      // if user is found and password is right
-      // create a token
-      const acls = [
-        'users:read',
-        'users:create'
-      ];
-      const claims = {
-        sub: rows[0].id,
-        iss: 'http://mysitedomain.com',
-        scopes: acls
-        
-      };
-      var token = jwt.sign(claims, secrets.secret, {
-        expiresIn: 86400 // expires in 24 hours
-      });
-      console.log(token);
-      res.json({
-        success: true,
-        message: 'Enjoy your token',
-        token: token
+
+      bcrypt.compare(req.body.password, rows[0].passwordHashed, function(err, response) {
+        if (response === false) {
+          res.json({ success: false, message: 'Authentication failed' });
+          console.log('password doesnt match ');
+        }
+
+        console.log('user found: ' + rows);
+        // if user is found and password is right
+        // create a token
+        const acls = [
+          'users:read',
+          'users:create'
+        ];
+        const claims = {
+          sub: rows[0].id,
+          iss: 'http://mysitedomain.com',
+          scopes: acls
+          
+        };
+        var token = jwt.sign(claims, secrets.secret, {
+          expiresIn: 86400 // expires in 24 hours
+        });
+        console.log(token);
+        res.json({
+          success: true,
+          message: 'Enjoy your token',
+          token: token
+        });
+
       });
     } else {
       res.json({ success: false, message: 'Authentication failed. User not found.' });

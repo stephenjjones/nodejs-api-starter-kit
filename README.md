@@ -66,8 +66,8 @@ $ npm install bluebird --save
 #### Setup Postgres Database
 
 ##### Mac OS X
-[Installation guide](http://www.russbrooks.com/2010/11/25/install-postgresql-9-on-os-x)
-[Postgres install guide](https://www.codefellows.org/blog/three-battle-tested-ways-to-install-postgresql)
+* [Installation guide](http://www.russbrooks.com/2010/11/25/install-postgresql-9-on-os-x)
+* [Postgres install guide](https://www.codefellows.org/blog/three-battle-tested-ways-to-install-postgresql)
 ```
 $ brew update
 $ brew install postgresql
@@ -105,10 +105,10 @@ I recommend using [Postman](http://www.getpostman.com/) to query you api during 
 
 ### Token based Auth
 
-[general jwt overview](https://scotch.io/tutorials/the-ins-and-outs-of-token-based-authentication)
-[Anatomy of a jwt](https://scotch.io/tutorials/the-anatomy-of-a-json-web-token)
-[Authenticate a nodejs api with jwt](https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens)
-[jwt explained by stormpath](https://stormpath.com/blog/nodejs-jwt-create-verify/)
+* [general jwt overview](https://scotch.io/tutorials/the-ins-and-outs-of-token-based-authentication)
+* [Anatomy of a jwt](https://scotch.io/tutorials/the-anatomy-of-a-json-web-token)
+* [Authenticate a nodejs api with jwt](https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens)
+* [jwt explained by stormpath](https://stormpath.com/blog/nodejs-jwt-create-verify/)
 
 
 ### pm2 commands
@@ -131,9 +131,11 @@ a connection pool.
 $ knex migrate:make migration_name
 $ knex migrate:latest --env production
 $ knex seed:make seed_name
+$ npm install knex -g       # install globally to run knex cli
+$ npm seed:run
 ```
 
 ### Auth / Auth
 
-[activity based authorization](http://derickbailey.com/2014/11/30/mustbe-authorization-plumbing-for-nodejs-express-apps/)
-[use jwt scopes](https://auth0.com/blog/2014/12/02/using-json-web-tokens-as-api-keys/)
+* [activity based authorization](http://derickbailey.com/2014/11/30/mustbe-authorization-plumbing-for-nodejs-express-apps/)
+* [use jwt scopes](https://auth0.com/blog/2014/12/02/using-json-web-tokens-as-api-keys/)

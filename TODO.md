@@ -1,3 +1,5 @@
+- [ ] Refactor routes to just call controllers
+- [ ] Refactor out db operations into an ORM style, calls in controllers should be abstracted
 - [ ] Design schema for users/roles/acl
 - [ ] script for creating database tables
 - [ ] crypt user passwords
