@@ -3,6 +3,7 @@ import merge from 'lodash/merge';
 import paginate from './paginate';
 import { routeReducer } from 'react-router-redux';
 import { combineReducers } from 'redux';
+import {reducer as formReducer} from 'redux-form';
 
 // Updates an entity cache in response to any action with response.entities.
 function entities(state = { users: {}, repos: {} }, action) {
@@ -42,7 +43,8 @@ const rootReducer = combineReducers({
   entities,
   pagination,
   errorMessage,
-  routing: routeReducer
+  routing: routeReducer,
+  form: formReducer
 });
 
 

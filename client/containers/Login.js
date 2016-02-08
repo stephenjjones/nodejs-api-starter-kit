@@ -1,11 +1,35 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default class Login extends Component {
+import LoginForm from 'components/LoginForm';
+import { authenticateUser } from 'actions';
+
+class Login extends Component {
+  handleSubmit(data) {
+    const {authenticateUser} = this.props;
+    authenticateUser(data.email, data.password);
+  }
+
   render() {
     return (
       <div>
         <h1>Login container</h1>
+        <LoginForm submitting={false} onSubmit={this.handleSubmit.bind(this)}/>
       </div>
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    state
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    authenticateUser: (email, password) => dispatch(authenticateUser(email, password))
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

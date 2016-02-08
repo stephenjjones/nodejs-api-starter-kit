@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 const bookshelf = require('./models/bookshelf');
 const config = require('./config');
@@ -13,6 +14,8 @@ const app = express();
 const port = config.port;
 
 app.set('superSecret', secrets.secret);
+
+app.use(cookieParser())
 
 // use body parser so we can get info from POST and/or URL parameters
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -27,7 +30,7 @@ app.use('/static', express.static(staticDir));
 
 app.use('/api/', apiRouter);
 
-app.get('/', function(req, res) {
+app.get('/*', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 

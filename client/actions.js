@@ -11,7 +11,10 @@ function fetchRecipe(recipeId) {
     [CALL_API]: {
       types: [ RECIPE_REQUEST, RECIPE_SUCCESS, RECIPE_FAILURE ],
       endpoint: `recipes/${recipeId}`,
-      schema: Schemas.RECIPE
+      schema: Schemas.RECIPE,
+      requestOptions: {
+        credentials: 'same-origin'
+      }
     }
   };
 }
@@ -70,5 +73,44 @@ export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE';
 export function resetErrorMessage() {
   return {
     type: RESET_ERROR_MESSAGE
+  };
+}
+
+export const AUTHENTICATE_REQUEST = 'AUTHENTICATE_REQUEST';
+export const AUTHENTICATE_SUCCESS = 'AUTHENTICATE_SUCCESS';
+export const AUTHENTICATE_FAILURE = 'AUTHENTICATE_FAILURE';
+
+// Authenticates user and returns jwt auth token
+function fetchAuthenticationToken(email, password) {
+  const endpoint = 'http://localhost:3008/api/authenticate';
+  const apiOptions = {
+    method: 'post',
+    credentials: 'include',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({email: email, password: password})
+  };
+  return (
+    fetch(endpoint, apiOptions)
+    .then(response =>
+      response.json().then(json => ({ json, response }))
+    ).then(({ json, response }) => {
+      if (!response.ok) {
+        return Promise.reject(json);
+      }
+      return json;
+    })
+  );
+}
+
+// add in request action
+export function authenticateUser(email, password) {
+  return function (dispatch) {
+    return fetchAuthenticationToken(email, password).then(
+      response => dispatch({type: AUTHENTICATE_SUCCESS, payload: response.token}),
+      error => dispatch({type: AUTHENTICATE_FAILURE, error})
+    );
   };
 }

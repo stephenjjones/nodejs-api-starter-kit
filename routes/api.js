@@ -42,6 +42,9 @@ router.post('/authenticate', function(req, res) {
           expiresIn: 86400 // expires in 24 hours
         });
         console.log(token);
+        res.cookie('token', token, { domain: '', httpOnly: true});
+        res.set('Access-Control-Allow-Origin', 'localhost:3008');
+        res.set('Access-Control-Allow-Credentials', 'true');
         res.json({
           success: true,
           message: 'Enjoy your token',
@@ -64,7 +67,7 @@ router.post('/authenticate', function(req, res) {
 // route middleware to verify a token
 router.use(function(req, res, next) {
   // check header or url parameters or post parameters for token
-  var token = req.body.token || req.query.token || req.headers['x-access-token'];
+  var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.cookies.token;
 
   // decode token
   if (token) {
@@ -84,8 +87,8 @@ router.use(function(req, res, next) {
     // if there is no token
     // return an error
     return res.status(403).send({ 
-        success: false, 
-        message: 'No token provided.' 
+      success: false, 
+      message: 'No token provided.' 
     });
     
   }

@@ -1,3 +1,4 @@
+- [ ] dynamically set cookie domain for auth token. set to "" for localhost development
 - [ ] Refactor routes to just call controllers
 - [ ] Refactor out db operations into an ORM style, calls in controllers should be abstracted
 - [ ] Design schema for users/roles/acl
