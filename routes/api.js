@@ -6,6 +6,8 @@ const bcrypt = require('bcrypt');
 const db = require('../models/bookshelf').knex;
 const secrets = require('../SECRETS');
 const Users = require('../models/user');
+const Recipes = require('../models/recipe').Recipes;
+const Recipe = require('../models/recipe').Recipe;
 var check_scopes = require('../middleware/checkscopes');
 
 const BCRYPT_WORK_FACTOR = 12;
@@ -29,7 +31,9 @@ router.post('/authenticate', function(req, res) {
           // create a token
           const acls = [
             'users:read',
-            'users:create'
+            'users:create',
+            'recipes:create',
+            'recipes:read'
           ];
           const claims = {
             sub: rows[0].id,
@@ -62,7 +66,6 @@ router.post('/authenticate', function(req, res) {
     console.log(err);
   });
 });
-
 
 // route middleware to verify a token
 router.use(function(req, res, next) {
@@ -107,9 +110,35 @@ router.get('/users', check_scopes(['users:read']), function(req, res) {
   });
 });
 
-router.get('/users/:email', function(req, res) {
-  res.send('hello ' + req.params.email);
+// RECIPE ROUTES
+router.get('/recipes', check_scopes(['recipes:read']), function(req, res) {
+  var results = [];
+
+  Recipes.forge()
+  .fetch()
+  .then(function (collection) {
+    res.json({error: false, data: collection.toJSON()});
+  })
+  .catch(function (err) {
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
 });
 
+router.post('/recipes', check_scopes(['recipes:create']), function(req, res) {
+  var results = [];
+
+  Recipe.forge({
+    name: req.body.name,
+    overview: req.body.overview,
+    category: req.body.category
+  })
+  .save()
+  .then(function (recipe) {
+    res.json({error: false, data: recipe.toJSON()});
+  })
+  .catch(function (err) {
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
+});
 
 module.exports = router;

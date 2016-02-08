@@ -73,7 +73,8 @@ $ brew update
 $ brew install postgresql
 $ which psql                            # confirm proper installation at /usr/local/bin/psql
 $ postgres -D /usr/local/var/postgres   # start postgres (some guides suggest starting with launchctl at startup, I prefer explicitly starting)
-$ pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start
+$ pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start # alternative way to start mannually
+$ pg_ctl -D /usr/local/var/postgres stop -s -m fast # Stop manually
 $ createdb `whoami`                     # create a default db based on your username
 $ psql                                  # logs into postgres shell
 =# CREATE DATABASE your_db_name OWNER your_db_user ENCODING 'UTF8'
@@ -134,7 +135,7 @@ $ knex migrate:make migration_name
 $ knex migrate:latest --env production
 $ knex seed:make seed_name
 $ npm install knex -g       # install globally to run knex cli
-$ npm seed:run
+$ knex seed:run
 ```
 
 ### Auth / Auth
