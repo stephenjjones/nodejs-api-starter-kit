@@ -5,10 +5,10 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      user: 'stephenjones',
+      user: 'jones',
       host: 'localhost',
       port: '5432',
-      database: 'nodestarter',
+      database: 'recipedb',
       charset: 'utf8'
     },
     seeds: {

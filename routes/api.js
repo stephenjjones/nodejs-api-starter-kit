@@ -21,35 +21,35 @@ router.post('/authenticate', function(req, res) {
 
       bcrypt.compare(req.body.password, rows[0].passwordHashed, function(err, response) {
         if (response === false) {
-          res.json({ success: false, message: 'Authentication failed' });
           console.log('password doesnt match ');
+          res.json({ success: false, message: 'Authentication failed' });
+        } else {
+          console.log('user found: ' + rows);
+          // if user is found and password is right
+          // create a token
+          const acls = [
+            'users:read',
+            'users:create'
+          ];
+          const claims = {
+            sub: rows[0].id,
+            iss: 'http://mysitedomain.com',
+            scopes: acls
+            
+          };
+          var token = jwt.sign(claims, secrets.secret, {
+            expiresIn: 86400 // expires in 24 hours
+          });
+          console.log(token);
+          res.cookie('token', token, { domain: '', httpOnly: true});
+          res.set('Access-Control-Allow-Origin', 'localhost:3008');
+          res.set('Access-Control-Allow-Credentials', 'true');
+          res.json({
+            success: true,
+            message: 'Enjoy your token',
+            token: token
+          });
         }
-
-        console.log('user found: ' + rows);
-        // if user is found and password is right
-        // create a token
-        const acls = [
-          'users:read',
-          'users:create'
-        ];
-        const claims = {
-          sub: rows[0].id,
-          iss: 'http://mysitedomain.com',
-          scopes: acls
-          
-        };
-        var token = jwt.sign(claims, secrets.secret, {
-          expiresIn: 86400 // expires in 24 hours
-        });
-        console.log(token);
-        res.cookie('token', token, { domain: '', httpOnly: true});
-        res.set('Access-Control-Allow-Origin', 'localhost:3008');
-        res.set('Access-Control-Allow-Credentials', 'true');
-        res.json({
-          success: true,
-          message: 'Enjoy your token',
-          token: token
-        });
 
       });
     } else {

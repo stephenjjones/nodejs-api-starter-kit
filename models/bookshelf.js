@@ -1,10 +1,10 @@
 const dbConfig = {
   client: 'pg',
   connection: {
-    user: 'stephenjones',
+    user: 'jones',
     host: 'localhost',
     port: '5432',
-    database: 'nodestarter',
+    database: 'recipedb',
     charset  : 'utf8'
   },
   debug: true

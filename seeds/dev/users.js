@@ -4,7 +4,7 @@ const BCRYPT_WORK_FACTOR = 12;
 
 const hashPassword = function(password, work_factor) {
     const salt = bcrypt.genSaltSync(BCRYPT_WORK_FACTOR);
-    const passwordHashed = bcrypt.hashSync(req.body.password, salt);
+    const passwordHashed = bcrypt.hashSync(password, salt);
     return passwordHashed;
 };
 
