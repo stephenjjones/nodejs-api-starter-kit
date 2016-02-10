@@ -133,6 +133,7 @@ a connection pool.
 ```
 $ knex migrate:make migration_name
 $ knex migrate:latest --env production
+$ knex migrate:rollback
 $ knex seed:make seed_name
 $ npm install knex -g       # install globally to run knex cli
 $ knex seed:run

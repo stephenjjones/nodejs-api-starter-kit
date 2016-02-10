@@ -33,6 +33,8 @@ router.post('/authenticate', function(req, res) {
             'users:read',
             'users:create',
             'recipes:create',
+            'recipes:edit',
+            'recipes:delete',
             'recipes:read'
           ];
           const claims = {
@@ -103,7 +105,7 @@ router.get('/users', check_scopes(['users:read']), function(req, res) {
   Users.forge()
   .fetch()
   .then(function (collection) {
-    res.json({error: false, data: collection.toJSON()});
+    res.json({error: false, users: collection.toJSON()});
   })
   .catch(function (err) {
     res.status(500).json({error: true, data: {message: err.message}});
@@ -111,13 +113,67 @@ router.get('/users', check_scopes(['users:read']), function(req, res) {
 });
 
 // RECIPE ROUTES
+
+router.get('/recipes/:id', check_scopes(['recipes:read']), function(req, res) {
+  Recipe.forge({id: req.params.id})
+  .fetch()
+  .then(function (item) {
+    if (!item) {
+      res.status(404).json({error: true, data: {}});
+    } else {
+      res.json({error: false, data: item.toJSON()});
+    }
+  })
+  .catch(function (err) {
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
+});
+
+router.put('/recipes/:id', check_scopes(['recipes:edit']), function(req, res) {
+  Recipe.forge({id: req.params.id})
+  .fetch({require: true})
+  .then(function (recipe) {
+    recipe.save({
+      name: req.body.name || recipe.get('name'),
+      overview: req.body.overview || recipe.get('overview'),
+      category: req.body.category || recipe.get('category')
+    })
+    .then(function() {
+      res.json({error: false, data: {message: 'Recipe details updated'}});
+    })
+    .catch(function (err) {
+      res.status(500).json({error: true, data: {message: err.message}});
+    });
+  })
+  .catch(function (err) {
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
+});
+
+router.delete('/recipes/:id', check_scopes(['recipes:delete']), function(req, res) {
+  Recipe.forge({id: req.params.id})
+  .fetch({require: true})
+  .then(function (recipe) {
+    recipe.destroy()
+    .then(function() {
+      res.json({error: false, data: {message: 'Recipe successfully deleted'}});
+    })
+    .catch(function (err) {
+      res.status(500).json({error: true, data: {message: err.message}});
+    });
+  })
+  .catch(function (err) {
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
+});
+
 router.get('/recipes', check_scopes(['recipes:read']), function(req, res) {
   var results = [];
 
   Recipes.forge()
   .fetch()
   .then(function (collection) {
-    res.json({error: false, data: collection.toJSON()});
+    res.json({error: false, results: collection.toJSON()});
   })
   .catch(function (err) {
     res.status(500).json({error: true, data: {message: err.message}});

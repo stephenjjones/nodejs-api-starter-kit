@@ -1,5 +1,49 @@
 import { CALL_API, Schemas } from 'middleware/api';
 
+export const ADD_RECIPE_REQUEST = 'ADD_RECIPE_REQUEST';
+export const ADD_RECIPE_SUCCESS = 'ADD_RECIPE_SUCCESS';
+export const ADD_RECIPE_FAILURE = 'ADD_RECIPE_FAILURE';
+
+export function addRecipe(data) {
+  return {
+    [CALL_API]: {
+      types: [ ADD_RECIPE_REQUEST, ADD_RECIPE_SUCCESS, ADD_RECIPE_FAILURE ],
+      endpoint: `recipes`,
+      schema: Schemas.RECIPE,
+      requestOptions: {
+        credentials: 'same-origin',
+        body: JSON.stringify(data)
+      },
+      payload: { data }
+    }
+  };
+}
+
+export const ALL_RECIPE_REQUEST = 'ALL_RECIPE_REQUEST';
+export const ALL_RECIPE_SUCCESS = 'ALL_RECIPE_SUCCESS';
+export const ALL_RECIPE_FAILURE = 'ALL_RECIPE_FAILURE';
+
+// Fetches a single recipe from recipe API.
+// Relies on the custom API middleware defined in ../middleware/api.js.
+export function fetchAllRecipes() {
+  return {
+    [CALL_API]: {
+      types: [ ALL_RECIPE_REQUEST, ALL_RECIPE_SUCCESS, ALL_RECIPE_FAILURE ],
+      endpoint: `/recipes`,
+      schema: Schemas.RECIPE_ARRAY,
+      requestOptions: {
+        credentials: 'same-origin'
+      }
+    }
+  };
+}
+
+export function loadAllRecipes() {
+  return (dispatch) => {
+    return dispatch(fetchAllRecipes());
+  };
+}
+
 export const RECIPE_REQUEST = 'RECIPE_REQUEST';
 export const RECIPE_SUCCESS = 'RECIPE_SUCCESS';
 export const RECIPE_FAILURE = 'RECIPE_FAILURE';
