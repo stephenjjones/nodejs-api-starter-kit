@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 
 //import LoginForm from 'components/LoginForm';
 import { loadAllRecipes, addRecipe } from 'actions';
-import RecipeInput from '../components/RecipeInput';
+import RecipeEditContainer from '../containers/RecipeEditContainer';
+import RecipeListItem from '../components/RecipeListItem';
 
 function loadData(props) {
   props.loadRecipes();
@@ -25,14 +26,14 @@ class RecipeListPage extends Component {
   }
 
   render() {
-    const {recipes} = this.props;
+    const {recipes, visibleRecipes} = this.props;
     return (
       <div>
         <h1>Recipe List</h1>
-        <ol>
-          {recipes[1] && [1].map((recipe, index) => <li key={index}>{recipes[recipe].name}</li>)}
+        <RecipeEditContainer />
+        <ol style={{width:'500px'}}>
+          {visibleRecipes && visibleRecipes.map((recipeId, index) => <li key={index}><RecipeListItem recipe={recipes[recipeId]}/></li>)}
         </ol>
-        <RecipeInput />
       </div>
     );
   }
@@ -41,13 +42,16 @@ class RecipeListPage extends Component {
 RecipeListPage.propTypes = {
   loadRecipes: PropTypes.func.isRequired,
   addItem: PropTypes.func.isRequired,
-  recipes: PropTypes.object
+  recipes: PropTypes.object,
+  visibleRecipes: PropTypes.array
 };
 
 function mapStateToProps(state) {
   const {entities: {recipes}} = state;
+  const visibleRecipes = Object.keys(recipes);
   return {
-    recipes
+    recipes,
+    visibleRecipes
   };
 }
 

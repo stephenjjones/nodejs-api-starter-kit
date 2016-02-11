@@ -1,3 +1,5 @@
+import { routeActions } from 'react-router-redux';
+
 import { CALL_API, Schemas } from 'middleware/api';
 
 export const ADD_RECIPE_REQUEST = 'ADD_RECIPE_REQUEST';
@@ -8,9 +10,14 @@ export function addRecipe(data) {
   return {
     [CALL_API]: {
       types: [ ADD_RECIPE_REQUEST, ADD_RECIPE_SUCCESS, ADD_RECIPE_FAILURE ],
-      endpoint: `recipes`,
+      endpoint: `/recipes`,
       schema: Schemas.RECIPE,
       requestOptions: {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
         credentials: 'same-origin',
         body: JSON.stringify(data)
       },
@@ -153,7 +160,11 @@ function fetchAuthenticationToken(email, password) {
 export function authenticateUser(email, password) {
   return function (dispatch) {
     return fetchAuthenticationToken(email, password).then(
-      response => dispatch({type: AUTHENTICATE_SUCCESS, payload: response.token}),
+      response => {
+        dispatch({type: AUTHENTICATE_SUCCESS, payload: response.token});
+        const nextUrl = 'http://localhost:3008/recipes';
+        dispatch(routeActions.push(nextUrl));
+      },
       error => dispatch({type: AUTHENTICATE_FAILURE, error})
     );
   };

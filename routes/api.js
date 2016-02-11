@@ -182,6 +182,7 @@ router.get('/recipes', check_scopes(['recipes:read']), function(req, res) {
 
 router.post('/recipes', check_scopes(['recipes:create']), function(req, res) {
   var results = [];
+  console.log(req.body);
 
   Recipe.forge({
     name: req.body.name,
@@ -190,7 +191,7 @@ router.post('/recipes', check_scopes(['recipes:create']), function(req, res) {
   })
   .save()
   .then(function (recipe) {
-    res.json({error: false, data: recipe.toJSON()});
+    res.json({error: false, results: recipe.toJSON()});
   })
   .catch(function (err) {
     res.status(500).json({error: true, data: {message: err.message}});

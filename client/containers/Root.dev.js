@@ -4,6 +4,10 @@ import routes from '../routes';
 import DevTools from './DevTools';
 import { Router, browserHistory } from 'react-router';
 
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+injectTapEventPlugin();
+
 export default class Root extends Component {
   render() {
     const { store } = this.props;
