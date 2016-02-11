@@ -1,6 +1,7 @@
 import { Schema, arrayOf, normalize } from 'normalizr';
 import { camelizeKeys } from 'humps';
 import 'isomorphic-fetch';
+import { routeActions } from 'react-router-redux';
 
 // Extracts the next page URL from recipe API response.
 function getNextPageUrl(response) {
@@ -73,7 +74,7 @@ export default store => next => action => {
   }
 
   let { endpoint } = callAPI;
-  const { schema, types } = callAPI;
+  const { schema, types, transitionToUrlOnSuccess } = callAPI;
 
   if (typeof endpoint === 'function') {
     endpoint = endpoint(store.getState());
@@ -102,10 +103,17 @@ export default store => next => action => {
   next(actionWith({ type: requestType }));
 
   return callApi(endpoint, callAPI.requestOptions, schema).then(
-    response => next(actionWith({
-      response,
-      type: successType
-    })),
+    response => {
+      next(actionWith({
+        response,
+        type: successType
+      }));
+
+      if (transitionToUrlOnSuccess) {
+        const nextUrl = transitionToUrlOnSuccess(response);
+        next(routeActions.push(nextUrl));
+      }
+    },
     error => next(actionWith({
       type: failureType,
       error: error.message || 'Something bad happened'

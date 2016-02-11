@@ -1,6 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
+import LeftNav from 'material-ui/lib/left-nav';
+import TextField from 'material-ui/lib/text-field';
+import List from 'material-ui/lib/lists/list';
+
 //import LoginForm from 'components/LoginForm';
 import { loadAllRecipes } from 'actions';
 import RecipeListItem from '../components/RecipeListItem';
@@ -14,32 +18,34 @@ class RecipeListPage extends Component {
     loadData(this.props);
   }
 
-
   render() {
-    const {recipes, visibleRecipes} = this.props;
+    const {recipes, visibleRecipes, selectedRecipeId} = this.props;
 
     return (
-      <div>
-        <h1>Recipe List</h1>
-        <ol style={{width:'500px'}}>
-          {visibleRecipes && visibleRecipes.map((recipeId, index) => <li key={index}><RecipeListItem recipe={recipes[recipeId]}/></li>)}
-        </ol>
-      </div>
+      <LeftNav docked={true} style={{top:'65px'}} open={true}>
+        <TextField hintText='search recipe'/>
+        <List>
+          {visibleRecipes && visibleRecipes.map((recipeId, index) => <RecipeListItem key={index} selectedRecipeId={selectedRecipeId} recipe={recipes[recipeId]}/>)}
+        </List>
+      </LeftNav>
     );
   }
 }
 
 RecipeListPage.propTypes = {
   loadRecipes: PropTypes.func.isRequired,
+  isOpen: PropTypes.bool.isRequired,
   recipes: PropTypes.object,
-  visibleRecipes: PropTypes.array
+  visibleRecipes: PropTypes.array,
+  selectedRecipeId: PropTypes.number
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   const {entities: {recipes}} = state;
   const visibleRecipes = Object.keys(recipes);
   return {
     recipes,
+    selectedRecipeId: Number(ownProps.params.recipeId),
     visibleRecipes
   };
 }

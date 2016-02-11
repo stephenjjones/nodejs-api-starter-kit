@@ -12,6 +12,7 @@ export function addRecipe(data) {
       types: [ ADD_RECIPE_REQUEST, ADD_RECIPE_SUCCESS, ADD_RECIPE_FAILURE ],
       endpoint: `/recipes`,
       schema: Schemas.RECIPE,
+      transitionToUrlOnSuccess: (response) => `/recipes/${response.result}`,
       requestOptions: {
         method: 'post',
         headers: {

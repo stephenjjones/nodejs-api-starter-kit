@@ -1,26 +1,45 @@
-import React from 'react';
-import Card from 'material-ui/lib/card/card';
-import CardActions from 'material-ui/lib/card/card-actions';
-import CardHeader from 'material-ui/lib/card/card-header';
-import RaisedButton from 'material-ui/lib/raised-button';
-import CardText from 'material-ui/lib/card/card-text';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
 
-const RecipeListItem = ({recipe}) => (
-  <Card>
-    <CardHeader
-      title={recipe.name}
-      subtitle={recipe.category}
-      actAsExpander={true}
-      showExpandableButton={true}
-    />
-    <CardText expandable={true} >
-      {recipe.overview}
-    </CardText>
-    <CardActions expandable={true}>
-      <RaisedButton label="Delete" primary={true} />
-      <RaisedButton label="Edit" secondary={true} />
-    </CardActions>
-  </Card>
-);
+import ListItem from 'material-ui/lib/lists/list-item';
+import { routeActions } from 'react-router-redux';
 
-export default RecipeListItem;
+class RecipeListItem extends Component {
+  constructor() {
+    super();
+    this.handleItemSelect = this.handleItemSelect.bind(this);
+  }
+
+  handleItemSelect() {
+    const {goToUrl, recipe} = this.props;
+    goToUrl(`/recipes/${recipe.id}`);
+  }
+
+  render() {
+    const {recipe, selectedRecipeId} = this.props;
+
+    const style = selectedRecipeId === recipe.id ? {backgroundColor: 'rgba(0, 0, 0, 0.2)'} : {};
+    return (
+      <ListItem value={recipe.id} onTouchTap={this.handleItemSelect} style={style}>
+        {recipe.name}
+      </ListItem>
+    );
+  }
+}
+
+RecipeListItem.propTypes = {
+  goToUrl: PropTypes.func.isRequired
+};
+
+function mapStateToProps() {
+  return {
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    goToUrl: (url) => dispatch(routeActions.push(url))
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecipeListItem);
