@@ -53,13 +53,21 @@ function callApi(endpoint, requestOptions, schema) {
 
 const recipeSchema = new Schema('recipes');
 const ingredientSchema = new Schema('ingredients');
+const stepSchema = new Schema('steps');
+
+recipeSchema.define({
+  steps: arrayOf(stepSchema),
+  ingredients: arrayOf(ingredientSchema)
+});
 
 // Schemas for recipe API responses.
 export const Schemas = {
   RECIPE: recipeSchema,
   RECIPE_ARRAY: arrayOf(recipeSchema),
   INGREDIENT: ingredientSchema,
-  INGREDIENT_ARRAY: arrayOf(ingredientSchema)
+  INGREDIENT_ARRAY: arrayOf(ingredientSchema),
+  STEP: stepSchema,
+  STEP_ARRAY: arrayOf(stepSchema)
 };
 
 // Action key that carries API call info interpreted by this Redux middleware.

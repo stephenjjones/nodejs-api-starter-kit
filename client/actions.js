@@ -27,6 +27,79 @@ export function addRecipe(data) {
   };
 }
 
+export const EDIT_RECIPE_REQUEST = 'EDIT_RECIPE_REQUEST';
+export const EDIT_RECIPE_SUCCESS = 'EDIT_RECIPE_SUCCESS';
+export const EDIT_RECIPE_FAILURE = 'EDIT_RECIPE_FAILURE';
+
+export function editRecipe(itemId, data) {
+  return {
+    [CALL_API]: {
+      types: [ EDIT_RECIPE_REQUEST, EDIT_RECIPE_SUCCESS, EDIT_RECIPE_FAILURE ],
+      endpoint: `/recipes/${itemId}`,
+      schema: Schemas.RECIPE,
+      transitionToUrlOnSuccess: (response) => `/recipes/${response.result}`,
+      requestOptions: {
+        method: 'put',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(data)
+      },
+      payload: { data }
+    }
+  };
+}
+
+export const ADD_STEP_REQUEST = 'ADD_STEP_REQUEST';
+export const ADD_STEP_SUCCESS = 'ADD_STEP_SUCCESS';
+export const ADD_STEP_FAILURE = 'ADD_STEP_FAILURE';
+
+export function addStep(recipeId, data) {
+  return {
+    [CALL_API]: {
+      types: [ ADD_STEP_REQUEST, ADD_STEP_SUCCESS, ADD_STEP_FAILURE ],
+      endpoint: `/recipes/${recipeId}/steps`,
+      schema: Schemas.STEP,
+      requestOptions: {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(data)
+      },
+      payload: { data }
+    }
+  };
+}
+
+export const EDIT_STEP_REQUEST = 'EDIT_STEP_REQUEST';
+export const EDIT_STEP_SUCCESS = 'EDIT_STEP_SUCCESS';
+export const EDIT_STEP_FAILURE = 'EDIT_STEP_FAILURE';
+
+export function editStep(recipeId, itemId, data) {
+  return {
+    [CALL_API]: {
+      types: [ EDIT_STEP_REQUEST, EDIT_STEP_SUCCESS, EDIT_STEP_FAILURE ],
+      endpoint: `/recipes/${recipeId}/steps/${itemId}`,
+      schema: Schemas.STEP,
+      requestOptions: {
+        method: 'put',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(data)
+      },
+      payload: { data }
+    }
+  };
+}
+
 export const ALL_RECIPE_REQUEST = 'ALL_RECIPE_REQUEST';
 export const ALL_RECIPE_SUCCESS = 'ALL_RECIPE_SUCCESS';
 export const ALL_RECIPE_FAILURE = 'ALL_RECIPE_FAILURE';

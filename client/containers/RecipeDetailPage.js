@@ -1,6 +1,15 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
+import Card from 'material-ui/lib/card/card';
+import CardTitle from 'material-ui/lib/card/card-title';
+import CardText from 'material-ui/lib/card/card-text';
+import List from 'material-ui/lib/lists/list';
+import ListItem from 'material-ui/lib/lists/list-item';
+import Divider from 'material-ui/lib/divider';
+import Checkbox from 'material-ui/lib/checkbox';
+
+import EditRecipeButton from './EditRecipeButton';
 
 class RecipeDetailPage extends Component {
 
@@ -11,9 +20,25 @@ class RecipeDetailPage extends Component {
   }
 
   renderComponents() {
-    const {recipe} = this.props;
+    const {recipe, steps} = this.props;
+    const recipeSteps = recipe.steps.map((stepId) => steps[stepId]);
+
     return (
-      <div>{recipe.name}</div>
+      <div style={{marginTop: '50px', width: '600px'}}>
+        <Card>
+          <EditRecipeButton />
+          <CardTitle style={{width: '80%'}} title={recipe.name} subtitle={recipe.category}>
+          </CardTitle>
+          <CardText>
+            {recipe.overview}
+            <h3>Ingredients</h3>
+            <h3>Directions</h3>
+            <List>
+              {recipeSteps.map((step) => <div key={step.id}><ListItem leftCheckbox={<Checkbox />} primaryText={step.text} /><Divider inset={true} /></div>)}
+            </List>
+          </CardText>
+        </Card>
+      </div>
     );
   }
 
@@ -28,15 +53,18 @@ class RecipeDetailPage extends Component {
 }
 
 RecipeDetailPage.propTypes = {
-  recipe: PropTypes.object
+  recipe: PropTypes.object,
+  steps: PropTypes.object
 };
 
 function mapStateToProps(state, ownProps) {
-  const {entities: {recipes}} = state;
+  const {entities: {recipes, steps, ingredients}} = state;
   const recipeId = Number(ownProps.params.recipeId);
   return {
     recipe: recipes[recipeId],
-    recipes
+    recipes,
+    steps,
+    ingredients
   };
 }
 

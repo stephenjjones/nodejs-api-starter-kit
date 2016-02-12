@@ -2,27 +2,30 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import RecipeForm from '../components/RecipeForm';
-import { addRecipe } from '../actions';
+import { editRecipe } from '../actions';
 
 class RecipeEditContainer extends Component {
   constructor(props) {
     super(props);  
-    this.handleAddClick = this.handleAddClick.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleAddClick(formData) {
-    this.props.addItem(formData);
+  handleSubmit(formData) {
+    const {recipe} = this.props;
+    this.props.editItem(recipe.id, formData);
   }
 
   render() {
+    const {recipe} = this.props;
     return (
-      <RecipeForm formKey='new' onSubmit={this.handleAddClick} />
+      <RecipeForm initialValues={recipe} formKey={`${recipe.id}`} onSubmit={this.handleSubmit} />
     );
   }
 }
 
 RecipeEditContainer.propTypes = {
-  addItem: PropTypes.func.isRequired
+  editItem: PropTypes.func.isRequired,
+  recipe: PropTypes.object.isRequired
 };
 
 function mapStateToProps() {
@@ -31,7 +34,7 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addItem: (data) => dispatch(addRecipe(data))
+    editItem: (itemId, data) => dispatch(editRecipe(itemId, data))
   };
 }
 

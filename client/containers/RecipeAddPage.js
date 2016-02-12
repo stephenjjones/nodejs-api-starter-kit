@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
 import { loadAllRecipes, addRecipe } from 'actions';
-import RecipeEditContainer from '../containers/RecipeEditContainer';
+import RecipeAddContainer from '../containers/RecipeAddContainer';
 
 function loadData(props) {
   props.loadRecipes();
@@ -26,8 +26,8 @@ class RecipeEditPage extends Component {
   render() {
     return (
       <div>
-        <h1>Recipe Edit</h1>
-        <RecipeEditContainer />
+        <h1>Add New Recipe</h1>
+        <RecipeAddContainer />
       </div>
     );
   }

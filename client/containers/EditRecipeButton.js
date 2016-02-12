@@ -2,38 +2,39 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import FloatingActionButton from 'material-ui/lib/floating-action-button';
-import ContentAdd from 'material-ui/lib/svg-icons/content/add';
 
 import { routeActions } from 'react-router-redux';
 
-class AddRecipeButton extends Component {
+class EditRecipeButton extends Component {
   constructor() {
     super();
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick() {
-    const {goToUrl} = this.props;
-    goToUrl('/recipes/add');
+    const {goToUrl, path} = this.props;
+    const editUrl = path + '/edit';
+    goToUrl(editUrl);
   }
 
   render() {
-    const {disabled} = this.props;
     return (
-      <FloatingActionButton onMouseUp={this.handleClick} disabled={disabled} style={{position: 'fixed', bottom: 20, right: 20}}>
-        <ContentAdd />
+      <FloatingActionButton onMouseUp={this.handleClick} mini={true} style={{float: 'right', marginTop: '10px', marginRight: '10px'}}>
+        <i className="material-icons">mode_edit</i>
       </FloatingActionButton>
     );
   }
 }
 
-AddRecipeButton.propTypes = {
+EditRecipeButton.propTypes = {
   goToUrl: PropTypes.func.isRequired,
-  disabled: PropTypes.bool
+  path: PropTypes.string.isRequired
 };
 
-function mapStateToProps() {
+function mapStateToProps(state) {
+  const {routing: {location}} = state;
   return {
+    path: location.pathname
   };
 }
 
@@ -43,4 +44,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddRecipeButton);
+export default connect(mapStateToProps, mapDispatchToProps)(EditRecipeButton);

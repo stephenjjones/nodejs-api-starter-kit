@@ -1,54 +1,70 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
-import { loadAllRecipes, addRecipe } from 'actions';
+import { loadAllRecipes } from 'actions';
 import RecipeEditContainer from '../containers/RecipeEditContainer';
+import StepAddContainer from '../containers/StepAddContainer';
+import StepEditContainer from '../containers/StepEditContainer';
 
 function loadData(props) {
   props.loadRecipes();
 }
 
 class RecipeEditPage extends Component {
-  constructor() {
-    super();
-    this.handleAddItem = this.handleAddItem.bind(this);
-  }
-
-  handleAddItem(data) {
-    const {addItem} = this.props;
-    addItem(data);
-  }
-
   componentDidMount() {
     loadData(this.props);
   }
 
-  render() {
+  renderLoadingScreen() {
+    return (
+      <div>loading...</div>
+    );
+  }
+
+  renderComponents(recipe) {
+    const {steps} = this.props;
+    const recipeSteps = recipe.steps.map((stepId) => steps[stepId]);
     return (
       <div>
         <h1>Recipe Edit</h1>
-        <RecipeEditContainer />
+        <RecipeEditContainer recipe={recipe} />
+        {recipeSteps.map((step) => <StepEditContainer key={step.id} step={step} recipe={recipe}/>)}
+        <StepAddContainer recipe={recipe} />
       </div>
     );
+  }
+
+  render() {
+    const {recipeId, recipes} = this.props;
+    const recipe = recipes && recipes[recipeId];
+
+    if (recipe) {
+      return this.renderComponents(recipe);
+    } else {
+      return this.renderLoadingScreen();
+    }
   }
 }
 
 RecipeEditPage.propTypes = {
-  recipe: PropTypes.object.isRequired,
-  addItem: PropTypes.func.isRequired
+  recipeId: PropTypes.number.isRequired,
+  recipes: PropTypes.object,
+  steps: PropTypes.object
 };
 
-function mapStateToProps(state) {
-  const {entities: {recipes}} = state;
+function mapStateToProps(state, ownProps) {
+  const {entities: {recipes, steps, ingredients}} = state;
   return {
-    recipes
+    recipeId: Number(ownProps.params.recipeId),
+    recipes,
+    steps,
+    ingredients
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadRecipes: () => dispatch(loadAllRecipes()),
-    addItem: (data) => dispatch(addRecipe(data))
+    loadRecipes: () => dispatch(loadAllRecipes())
   };
 }
 

@@ -8,6 +8,8 @@ const secrets = require('../SECRETS');
 const Users = require('../models/user');
 const Recipes = require('../models/recipe').Recipes;
 const Recipe = require('../models/recipe').Recipe;
+const Step = require('../models/step').Step;
+const Ingredient = require('../models/ingredient').Ingredient;
 var check_scopes = require('../middleware/checkscopes');
 
 const BCRYPT_WORK_FACTOR = 12;
@@ -116,7 +118,7 @@ router.get('/users', check_scopes(['users:read']), function(req, res) {
 
 router.get('/recipes/:id', check_scopes(['recipes:read']), function(req, res) {
   Recipe.forge({id: req.params.id})
-  .fetch()
+  .fetch({withRelated: ['steps', 'ingredients']})
   .then(function (item) {
     if (!item) {
       res.status(404).json({error: true, data: {}});
@@ -139,7 +141,7 @@ router.put('/recipes/:id', check_scopes(['recipes:edit']), function(req, res) {
       category: req.body.category || recipe.get('category')
     })
     .then(function() {
-      res.json({error: false, data: {message: 'Recipe details updated'}});
+      res.json({error: false, results: recipe.toJSON()});
     })
     .catch(function (err) {
       res.status(500).json({error: true, data: {message: err.message}});
@@ -171,7 +173,7 @@ router.get('/recipes', check_scopes(['recipes:read']), function(req, res) {
   var results = [];
 
   Recipes.forge()
-  .fetch()
+  .fetch({withRelated: ['steps', 'ingredients']})
   .then(function (collection) {
     res.json({error: false, results: collection.toJSON()});
   })
@@ -192,6 +194,42 @@ router.post('/recipes', check_scopes(['recipes:create']), function(req, res) {
   .save()
   .then(function (recipe) {
     res.json({error: false, results: recipe.toJSON()});
+  })
+  .catch(function (err) {
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
+});
+
+router.post('/recipes/:recipeId/steps', check_scopes(['recipes:create']), function(req, res) {
+  var results = [];
+  console.log(req.body);
+
+  Step.forge({
+    text: req.body.text,
+    recipe_id: req.params.recipeId
+  })
+  .save()
+  .then(function (step) {
+    res.json({error: false, results: step.toJSON()});
+  })
+  .catch(function (err) {
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
+});
+
+router.put('/recipes/:recipeId/steps/:stepId', check_scopes(['recipes:edit']), function(req, res) {
+  Step.forge({id: req.params.stepId})
+  .fetch({require: true})
+  .then(function (step) {
+    step.save({
+      text: req.body.text || step.get('text')
+    })
+    .then(function() {
+      res.json({error: false, results: step.toJSON()});
+    })
+    .catch(function (err) {
+      res.status(500).json({error: true, data: {message: err.message}});
+    });
   })
   .catch(function (err) {
     res.status(500).json({error: true, data: {message: err.message}});
