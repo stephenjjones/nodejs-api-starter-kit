@@ -6,6 +6,8 @@ import ContentAdd from 'material-ui/lib/svg-icons/content/add';
 
 import { routeActions } from 'react-router-redux';
 
+import { addRecipe } from 'actions';
+
 class AddRecipeButton extends Component {
   constructor() {
     super();
@@ -13,8 +15,10 @@ class AddRecipeButton extends Component {
   }
 
   handleClick() {
-    const {goToUrl} = this.props;
-    goToUrl('/recipes/add');
+    //const {goToUrl} = this.props;
+    //goToUrl('/recipes/add');
+    const {addItem} = this.props;
+    addItem({});
   }
 
   render() {
@@ -39,7 +43,8 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    goToUrl: (url) => dispatch(routeActions.push(url))
+    goToUrl: (url) => dispatch(routeActions.push(url)),
+    addItem: (data) => dispatch(addRecipe(data))
   };
 }
 

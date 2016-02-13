@@ -12,7 +12,7 @@ export function addRecipe(data) {
       types: [ ADD_RECIPE_REQUEST, ADD_RECIPE_SUCCESS, ADD_RECIPE_FAILURE ],
       endpoint: `/recipes`,
       schema: Schemas.RECIPE,
-      transitionToUrlOnSuccess: (response) => `/recipes/${response.result}`,
+      transitionToUrlOnSuccess: (response) => `/recipes/${response.result}/edit`,
       requestOptions: {
         method: 'post',
         headers: {
@@ -37,7 +37,6 @@ export function editRecipe(itemId, data) {
       types: [ EDIT_RECIPE_REQUEST, EDIT_RECIPE_SUCCESS, EDIT_RECIPE_FAILURE ],
       endpoint: `/recipes/${itemId}`,
       schema: Schemas.RECIPE,
-      transitionToUrlOnSuccess: (response) => `/recipes/${response.result}`,
       requestOptions: {
         method: 'put',
         headers: {
@@ -96,6 +95,121 @@ export function editStep(recipeId, itemId, data) {
         body: JSON.stringify(data)
       },
       payload: { data }
+    }
+  };
+}
+
+export const ADD_INGREDIENT_REQUEST = 'ADD_INGREDIENT_REQUEST';
+export const ADD_INGREDIENT_SUCCESS = 'ADD_INGREDIENT_SUCCESS';
+export const ADD_INGREDIENT_FAILURE = 'ADD_INGREDIENT_FAILURE';
+
+export function addIngredient(recipeId, data) {
+  return {
+    [CALL_API]: {
+      types: [ ADD_INGREDIENT_REQUEST, ADD_INGREDIENT_SUCCESS, ADD_INGREDIENT_FAILURE ],
+      endpoint: `/recipes/${recipeId}/ingredients`,
+      schema: Schemas.INGREDIENT,
+      requestOptions: {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(data)
+      },
+      payload: { data }
+    }
+  };
+}
+
+export const EDIT_INGREDIENT_REQUEST = 'EDIT_INGREDIENT_REQUEST';
+export const EDIT_INGREDIENT_SUCCESS = 'EDIT_INGREDIENT_SUCCESS';
+export const EDIT_INGREDIENT_FAILURE = 'EDIT_INGREDIENT_FAILURE';
+
+export function editIngredient(recipeId, itemId, data) {
+  return {
+    [CALL_API]: {
+      types: [ EDIT_INGREDIENT_REQUEST, EDIT_INGREDIENT_SUCCESS, EDIT_INGREDIENT_FAILURE ],
+      endpoint: `/recipes/${recipeId}/ingredients/${itemId}`,
+      schema: Schemas.INGREDIENT,
+      requestOptions: {
+        method: 'put',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify(data)
+      },
+      payload: { data }
+    }
+  };
+}
+
+export const DELETE_RECIPE_REQUEST = 'DELETE_RECIPE_REQUEST';
+export const DELETE_RECIPE_SUCCESS = 'DELETE_RECIPE_SUCCESS';
+export const DELETE_RECIPE_FAILURE = 'DELETE_RECIPE_FAILURE';
+
+export function deleteRecipe(recipeId) {
+  return {
+    [CALL_API]: {
+      types: [ DELETE_RECIPE_REQUEST, DELETE_RECIPE_SUCCESS, DELETE_RECIPE_FAILURE ],
+      endpoint: `/recipes/${recipeId}`,
+      schema: Schemas.RECIPE,
+      transitionToUrlOnSuccess: () => `/recipes`,
+      requestOptions: {
+        method: 'delete',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+      }
+    }
+  };
+}
+
+export const DELETE_STEP_REQUEST = 'DELETE_STEP_REQUEST';
+export const DELETE_STEP_SUCCESS = 'DELETE_STEP_SUCCESS';
+export const DELETE_STEP_FAILURE = 'DELETE_STEP_FAILURE';
+
+export function deleteStep(recipeId, itemId) {
+  return {
+    [CALL_API]: {
+      types: [ DELETE_STEP_REQUEST, DELETE_STEP_SUCCESS, DELETE_STEP_FAILURE ],
+      endpoint: `/recipes/${recipeId}/steps/${itemId}`,
+      schema: Schemas.STEP,
+      requestOptions: {
+        method: 'delete',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+      }
+    }
+  };
+}
+
+export const DELETE_INGREDIENT_REQUEST = 'DELETE_INGREDIENT_REQUEST';
+export const DELETE_INGREDIENT_SUCCESS = 'DELETE_INGREDIENT_SUCCESS';
+export const DELETE_INGREDIENT_FAILURE = 'DELETE_INGREDIENT_FAILURE';
+
+export function deleteIngredient(recipeId, itemId) {
+  return {
+    [CALL_API]: {
+      types: [ DELETE_INGREDIENT_REQUEST, DELETE_INGREDIENT_SUCCESS, DELETE_INGREDIENT_FAILURE ],
+      endpoint: `/recipes/${recipeId}/ingredients/${itemId}`,
+      schema: Schemas.INGREDIENT,
+      requestOptions: {
+        method: 'delete',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+      }
     }
   };
 }

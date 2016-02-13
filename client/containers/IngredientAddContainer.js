@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import StepForm from '../components/stepForm';
-import { addStep } from '../actions';
+import IngredientForm from '../components/IngredientForm';
+import { addIngredient } from '../actions';
 
-class StepAddContainer extends Component {
+class IngredientAddContainer extends Component {
   constructor(props) {
     super(props);  
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,12 +17,12 @@ class StepAddContainer extends Component {
 
   render() {
     return (
-      <StepForm formKey='new' onSubmit={this.handleSubmit} isNewForm={true}/>
+      <IngredientForm formKey='new' onSubmit={this.handleSubmit} isNewForm={true} />
     );
   }
 }
 
-StepAddContainer.propTypes = {
+IngredientAddContainer.propTypes = {
   addItem: PropTypes.func.isRequired,
   recipe: PropTypes.object.isRequired
 };
@@ -33,8 +33,8 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addItem: (recipeId, data) => dispatch(addStep(recipeId, data))
+    addItem: (recipeId, data) => dispatch(addIngredient(recipeId, data))
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StepAddContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(IngredientAddContainer);

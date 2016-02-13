@@ -20,8 +20,9 @@ class RecipeDetailPage extends Component {
   }
 
   renderComponents() {
-    const {recipe, steps} = this.props;
+    const {recipe, steps, ingredients} = this.props;
     const recipeSteps = recipe.steps.map((stepId) => steps[stepId]);
+    const recipeIngredients = recipe.ingredients.map((ingredientId) => ingredients[ingredientId]);
 
     return (
       <div style={{marginTop: '50px', width: '600px'}}>
@@ -32,9 +33,12 @@ class RecipeDetailPage extends Component {
           <CardText>
             {recipe.overview}
             <h3>Ingredients</h3>
+            <List>
+              {recipeIngredients.map((ingredient) => <div key={`${ingredient.id}`}><ListItem leftCheckbox={<Checkbox />} primaryText={ingredient.name} secondaryText={ingredient.amount} /><Divider inset={true} /></div>)}
+            </List>
             <h3>Directions</h3>
             <List>
-              {recipeSteps.map((step) => <div key={step.id}><ListItem leftCheckbox={<Checkbox />} primaryText={step.text} /><Divider inset={true} /></div>)}
+              {recipeSteps.map((step) => <div key={`${step.id}`}><ListItem leftCheckbox={<Checkbox />} primaryText={step.text} /><Divider inset={true} /></div>)}
             </List>
           </CardText>
         </Card>
@@ -54,7 +58,8 @@ class RecipeDetailPage extends Component {
 
 RecipeDetailPage.propTypes = {
   recipe: PropTypes.object,
-  steps: PropTypes.object
+  steps: PropTypes.object,
+  ingredients: PropTypes.object
 };
 
 function mapStateToProps(state, ownProps) {

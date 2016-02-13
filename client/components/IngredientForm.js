@@ -7,7 +7,7 @@ import ListItem from 'material-ui/lib/lists/list-item';
 import Checkbox from 'material-ui/lib/checkbox';
 import Popover from 'material-ui/lib/popover/popover';
 
-class StepForm extends Component {
+class IngredientForm extends Component {
   constructor(props) {
     super(props);
     this.handleTouchTap = this.handleTouchTap.bind(this);
@@ -32,25 +32,42 @@ class StepForm extends Component {
   }
 
   render() {
-    const { isNewForm, fields: { text }, handleSubmit, handleDelete, submitting } = this.props;
+    const { isNewForm, fields: { name, amount }, handleSubmit, submitting, handleDelete } = this.props;
     return (
       <form onSubmit={handleSubmit}>
         <ListItem
           leftCheckbox={<Checkbox disabled={true}/>}
           primaryText={
+            <div>
               <TextField
-                hintText="What's the next step?"
+                floatingLabelText="Ingredient"
+                style={{width: '40%', marginRight:'8px'}}
                 type="text"
                 underlineShow={true}
-                {...text}
+                {...name}
                 onBlur={event => {
-                  text.onChange(event);
-                  if (text.value) {
+                  name.onChange(event);
+                  if (name.value && amount.value) {
                     setTimeout(() =>
                       handleSubmit());
                   }
                 }}
               />
+              <TextField
+                floatingLabelText="Amount"
+                style={{width: '40%'}}
+                type="text"
+                underlineShow={true}
+                {...amount}
+                onBlur={event => {
+                  amount.onChange(event);
+                  if (name.value && amount.value) {
+                    setTimeout(() =>
+                      handleSubmit());
+                  }
+                }}
+              />
+            </div>
           }
           rightIconButton={isNewForm ? <RaisedButton type="submit" primary={true} disabled={submitting} label='add'/> : <RaisedButton type="button" onTouchTap={this.handleTouchTap} disabled={submitting} label='delete'/>}
         />
@@ -68,7 +85,7 @@ class StepForm extends Component {
   }
 }
 
-StepForm.propTypes = {
+IngredientForm.propTypes = {
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
@@ -76,9 +93,9 @@ StepForm.propTypes = {
   isNewForm: PropTypes.bool.isRequired
 };
 
-StepForm = reduxForm({
-  form: 'step',
-  fields: ['text']
-})(StepForm);
+IngredientForm = reduxForm({
+  form: 'ingredient',
+  fields: ['name', 'amount']
+})(IngredientForm);
 
-export default StepForm;
+export default IngredientForm;

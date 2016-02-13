@@ -1,45 +1,92 @@
 import React, { Component, PropTypes } from 'react';
 import {reduxForm} from 'redux-form';
 
-import Paper from 'material-ui/lib/paper';
 import TextField from 'material-ui/lib/text-field';
 import RaisedButton from 'material-ui/lib/raised-button';
 import Divider from 'material-ui/lib/divider';
-
-const style = {
-  width: 400,
-  margin: 20,
-  textAlign: 'center'
-};
+import Popover from 'material-ui/lib/popover/popover';
 
 class RecipeForm extends Component {
+  constructor(props) {
+    super(props);
+    this.handleTouchTap = this.handleTouchTap.bind(this);
+    this.handleRequestClose = this.handleRequestClose.bind(this);
+
+    this.state = {
+      open: false
+    };
+  }
+
+  handleTouchTap(event) {
+    this.setState({
+      open: true,
+      anchorEl: event.currentTarget
+    });
+  }
+
+  handleRequestClose() {
+    this.setState({
+      open: false
+    });
+  }
+
   render() {
-    const { fields: { name, category, overview }, handleSubmit, submitting } = this.props;
+    const { fields: { name, category, overview }, handleSubmit, handleDelete } = this.props;
     return (
-      <Paper style={style} zDepth={1} rounded={false}>
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
+        <RaisedButton type="button" onTouchTap={this.handleTouchTap} label='delete'/>
+        <Popover
+          open={this.state.open}
+          anchorEl={this.state.anchorEl}
+          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          onRequestClose={this.handleRequestClose}
+        >
+          <RaisedButton type="button" onTouchTap={handleDelete} label='Are you sure?'/> 
+        </Popover>
+        <div>
           <TextField
-            hintText="Name"
+            floatingLabelText="Name"
             type="text"
             underlineShow={true}
             {...name}
+            onBlur={event => {
+              name.onChange(event);
+              setTimeout(() =>
+                handleSubmit());
+            }}
           />
+        </div>
+        <div>
           <TextField
-            hintText="Category"
+            floatingLabelText="Category"
             type="text"
             underlineShow={true}
             {...category}
+            onBlur={event => {
+              category.onChange(event);
+              setTimeout(() =>
+                handleSubmit());
+            }}
           />
+        </div>
+        <div>
           <TextField
-            hintText="Overview"
+            floatingLabelText="Overview"
+            multiLine={true}
+            style={{width: '100%'}}
             type="text"
             underlineShow={true}
             {...overview}
+            onBlur={event => {
+              overview.onChange(event);
+              setTimeout(() =>
+                handleSubmit());
+            }}
           />
-          <Divider />
-          <RaisedButton type="submit" primary={true} disabled={submitting} label="Submit"/>
-        </form>
-      </Paper>
+        </div>
+        <Divider />
+      </form>
     );
   }
 }
@@ -47,6 +94,7 @@ class RecipeForm extends Component {
 RecipeForm.propTypes = {
   fields: PropTypes.object.isRequired,
   handleSubmit: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
   submitting: PropTypes.bool.isRequired
 };
 

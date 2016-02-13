@@ -152,13 +152,31 @@ router.put('/recipes/:id', check_scopes(['recipes:edit']), function(req, res) {
   });
 });
 
+router.delete('/recipes/:recipeId/ingredients/:ingredientId', check_scopes(['recipes:delete']), function(req, res) {
+  Ingredient.forge({id: req.params.ingredientId})
+  .fetch({require: true})
+  .then(function (ingredient) {
+    ingredient.destroy()
+    .then(function() {
+      res.json({error: false, results: {id: Number(req.params.ingredientId), recipe_id: Number(req.params.recipeId)}});
+    })
+    .catch(function (err) {
+      res.status(500).json({error: true, data: {message: err.message}});
+    });
+  })
+  .catch(function (err) {
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
+});
+
+
 router.delete('/recipes/:id', check_scopes(['recipes:delete']), function(req, res) {
   Recipe.forge({id: req.params.id})
   .fetch({require: true})
   .then(function (recipe) {
     recipe.destroy()
     .then(function() {
-      res.json({error: false, data: {message: 'Recipe successfully deleted'}});
+      res.json({error: false, results: {id: Number(req.params.id)}});
     })
     .catch(function (err) {
       res.status(500).json({error: true, data: {message: err.message}});
@@ -200,6 +218,23 @@ router.post('/recipes', check_scopes(['recipes:create']), function(req, res) {
   });
 });
 
+router.delete('/recipes/:recipeId/steps/:stepId', check_scopes(['recipes:delete']), function(req, res) {
+  Step.forge({id: req.params.stepId})
+  .fetch({require: true})
+  .then(function (step) {
+    step.destroy()
+    .then(function() {
+      res.json({error: false, results: {id: Number(req.params.stepId), recipe_id: Number(req.params.recipeId)}});
+    })
+    .catch(function (err) {
+      res.status(500).json({error: true, data: {message: err.message}});
+    });
+  })
+  .catch(function (err) {
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
+});
+
 router.post('/recipes/:recipeId/steps', check_scopes(['recipes:create']), function(req, res) {
   var results = [];
   console.log(req.body);
@@ -216,6 +251,7 @@ router.post('/recipes/:recipeId/steps', check_scopes(['recipes:create']), functi
     res.status(500).json({error: true, data: {message: err.message}});
   });
 });
+
 
 router.put('/recipes/:recipeId/steps/:stepId', check_scopes(['recipes:edit']), function(req, res) {
   Step.forge({id: req.params.stepId})
@@ -235,5 +271,44 @@ router.put('/recipes/:recipeId/steps/:stepId', check_scopes(['recipes:edit']), f
     res.status(500).json({error: true, data: {message: err.message}});
   });
 });
+
+router.post('/recipes/:recipeId/ingredients', check_scopes(['recipes:create']), function(req, res) {
+  var results = [];
+  console.log(req.body);
+
+  Ingredient.forge({
+    name: req.body.name,
+    amount: req.body.amount,
+    recipe_id: req.params.recipeId
+  })
+  .save()
+  .then(function (ingredient) {
+    res.json({error: false, results: ingredient.toJSON()});
+  })
+  .catch(function (err) {
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
+});
+
+router.put('/recipes/:recipeId/ingredients/:ingredientId', check_scopes(['recipes:edit']), function(req, res) {
+  Ingredient.forge({id: req.params.ingredientId})
+  .fetch({require: true})
+  .then(function (ingredient) {
+    ingredient.save({
+      name: req.body.name || ingredient.get('name'),
+      amount: req.body.amount || ingredient.get('amount')
+    })
+    .then(function() {
+      res.json({error: false, results: ingredient.toJSON()});
+    })
+    .catch(function (err) {
+      res.status(500).json({error: true, data: {message: err.message}});
+    });
+  })
+  .catch(function (err) {
+    res.status(500).json({error: true, data: {message: err.message}});
+  });
+});
+
 
 module.exports = router;

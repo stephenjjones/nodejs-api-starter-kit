@@ -78,6 +78,8 @@ $ pg_ctl -D /usr/local/var/postgres stop -s -m fast # Stop manually
 $ createdb `whoami`                     # create a default db based on your username
 $ psql                                  # logs into postgres shell
 =# CREATE DATABASE your_db_name OWNER your_db_user ENCODING 'UTF8'
+=# \d+ tablename
+=# alter table.public.ingredients drop constraint ingredients_recipe_id_foreign, add constraint ingredients_recipe_id_foreign foreign key (recipe_id) references recipes(id) on delete cascade;
 ```
 
 ##### AWS
