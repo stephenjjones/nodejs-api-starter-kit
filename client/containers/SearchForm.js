@@ -13,10 +13,6 @@ class SearchForm extends Component {
           type="text"
           underlineShow={true}
           {...query}
-          onBlur={() => {
-            setTimeout(() =>
-              handleSubmit());
-          }}
         />
       </form>
     );
