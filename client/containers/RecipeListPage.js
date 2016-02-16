@@ -1,9 +1,12 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 
+import Card from 'material-ui/lib/card/card';
+
 //import LoginForm from 'components/LoginForm';
 import { loadAllRecipes } from 'actions';
-import RecipeListItem from '../components/RecipeListItem';
+import RecipeGridItem from '../components/RecipeGridItem';
+
 
 function loadData(props) {
   props.loadRecipes();
@@ -19,11 +22,8 @@ class RecipeListPage extends Component {
     const {recipes, visibleRecipes} = this.props;
 
     return (
-      <div>
-        <h1>Recipe List</h1>
-        <ol style={{width:'500px'}}>
-          {visibleRecipes && visibleRecipes.map((recipeId, index) => <li key={index}><RecipeListItem recipe={recipes[recipeId]}/></li>)}
-        </ol>
+      <div style={{marginLeft: '300px', marginRight: '20px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', cursor: 'pointer'}}>
+        {visibleRecipes && visibleRecipes.map((recipeId, index) => <Card style={{marginTop: '8px'}}key={index}><RecipeGridItem recipe={recipes[recipeId]}/></Card>)}
       </div>
     );
   }

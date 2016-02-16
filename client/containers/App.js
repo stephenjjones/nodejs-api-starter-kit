@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router'
 
 import AppBar from 'material-ui/lib/app-bar';
 import RecipeListNav from './RecipeListNav';
@@ -24,7 +25,7 @@ export default class App extends Component {
     return (
       <div>
         <AppBar
-          title='Karens Kitchen'
+          title={<Link style={{color:'white', textDecoration: 'none'}} to={`/recipes`}>Karens Kitchen</Link>}
           showMenuIconButton={false}
           zDepth={0}
         />

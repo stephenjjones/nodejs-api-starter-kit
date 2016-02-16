@@ -11,6 +11,7 @@ class SearchForm extends Component {
         <TextField
           floatingLabelText="Search Recipes"
           type="text"
+          style={{paddingLeft: '15px'}}
           underlineShow={true}
           {...query}
         />

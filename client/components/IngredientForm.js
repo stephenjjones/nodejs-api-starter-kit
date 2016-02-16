@@ -36,6 +36,7 @@ class IngredientForm extends Component {
     return (
       <form onSubmit={handleSubmit}>
         <ListItem
+          style={{paddingTop:'0px'}}
           leftCheckbox={<Checkbox disabled={true}/>}
           primaryText={
             <div>

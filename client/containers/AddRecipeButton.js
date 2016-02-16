@@ -24,7 +24,7 @@ class AddRecipeButton extends Component {
   render() {
     const {disabled} = this.props;
     return (
-      <FloatingActionButton onMouseUp={this.handleClick} disabled={disabled} style={{position: 'fixed', bottom: 20, right: 20}}>
+      <FloatingActionButton onMouseUp={this.handleClick} disabled={disabled} style={{position: 'fixed', bottom: 20, right: 20, zIndex: 99}}>
         <ContentAdd />
       </FloatingActionButton>
     );
