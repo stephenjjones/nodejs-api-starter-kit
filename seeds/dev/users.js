@@ -16,6 +16,6 @@ exports.seed = function(knex, Promise) {
 
     // Inserts seed entries
     knex('users').insert({id: 1, email: 'stephen.jacob.jones@gmail.com', passwordHashed: hashPassword('password')}),
-    knex('users').insert({id: 2, email: 'heatherspeech@gmail.com', passwordHashed: hashPassword('password')})
+    //knex('users').insert({id: 2, email: 'sj@gmail.com', passwordHashed: hashPassword('password')})
   );
 };

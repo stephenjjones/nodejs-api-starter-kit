@@ -1,10 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router'
+import { Link } from 'react-router';
 
 import AppBar from 'material-ui/lib/app-bar';
 import RecipeListNav from './RecipeListNav';
+import FlatButton from 'material-ui/lib/flat-button';
 
 import AddRecipeButton from './AddRecipeButton';
+//iconElementRight={}
 
 export default class App extends Component {
   constructor(props) {
@@ -28,6 +30,7 @@ export default class App extends Component {
           title={<Link style={{color:'white', textDecoration: 'none'}} to={`/recipes`}>Karens Kitchen</Link>}
           showMenuIconButton={false}
           zDepth={0}
+          iconElementRight={<FlatButton label={<Link style={{color:'white', textDecoration: 'none'}} to={`/login`}>Login</Link>} />}
         />
         <RecipeListNav params={params} isOpen={this.state.open}/>
         <div style={{display: 'flex', justifyContent: 'center'}}>
